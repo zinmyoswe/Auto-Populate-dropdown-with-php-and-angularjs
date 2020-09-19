@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+    <head>
+        <title>How to Auto-populate Dropdown with AngularJS and PHP</title>
+
+        <script src="angular.min.js"></script>
+        
+    </head>
+    <body ng-app='myapp'>
+
+        <div ng-controller="fetchCtrl">
+            
+            <table>
+                <tr>
+                    <td>State :</td>
+                    <td>
+                        <select ng-model='state' ng-change='fetchUsers()' >
+                           <option value='0'>-- Select State --</option>
+                           <option value='1'>Gujarat</option>
+                           <option value='2'>Madhya Pradesh</option>
+                           <option value='3'>Maharashtra</option>
+                           <option value='4'>Chhattisgarh</option>
+                           <option value='5'>Haryana</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>User :</td>
+                    <td>
+                        <select >
+                           <option value='0'>-- Select User --</option>
+                           <option ng-repeat="user in usersList" value='{{ user.id }}' >{{ user.name }}</option>
+                       </select>
+                    </td>
+                </tr>
+            </table>
+               
+        </div>
+        
+        <!-- Script -->
+        <script>
+        var fetch = angular.module('myapp', []);
+
+        fetch.controller('fetchCtrl', ['$scope', '$http', function ($scope, $http) {
+            $scope.state = '0';
+            // Fetch data
+            $scope.fetchUsers = function(){
+                
+                $http({
+                method: 'post',
+                url: 'getData.php',
+                data: {state:$scope.state}
+                }).then(function successCallback(response) {
+                    $scope.usersList = response.data;
+                });
+
+            }
+            
+        }]);
+
+        </script>
+        
+    </body>
+
+</html>
+
+
+        
